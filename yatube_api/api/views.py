@@ -9,7 +9,7 @@ from api.serializers import (PostSerializer,
                              FollowSerializer
                              )
 from api.permissions import IsAuthorPermission
-from posts.models import Post, Follow, Group, User
+from posts.models import Post, Group
 
 
 class PostViewSet(viewsets.ModelViewSet):
