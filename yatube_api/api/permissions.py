@@ -2,10 +2,19 @@ from rest_framework import permissions
 
 
 class IsAuthorPermission(permissions.BasePermission):
-    """Проверка соответствия автора поста и текущего юзера."""
+    """Запрос аутентифицируется как автор поста или комментария
+    или является запросом, доступным только для чтения.
+    """
+    def has_permission(self, request, view):
+
+        return bool(
+            request.method in permissions.SAFE_METHODS
+            or request.user
+            and request.user.is_authenticated
+        )
+
     def has_object_permission(self, request, view, obj):
-
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        return obj.author == request.user
+        return bool(
+            request.method in permissions.SAFE_METHODS
+            or obj.author == request.user
+        )

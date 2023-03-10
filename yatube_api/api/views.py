@@ -9,7 +9,7 @@ from api.serializers import (PostSerializer,
                              FollowSerializer
                              )
 from api.permissions import IsAuthorPermission
-from posts.models import Post, Follow, Group, User
+from posts.models import Post, Group
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -64,8 +64,9 @@ class FollowViewSet(CreateListViewSet):
     search_fields = ('following__username',)
 
     def get_queryset(self):
-        user = get_object_or_404(User, id=self.request.user.id)
-        return Follow.objects.filter(user=user)
+        # user = get_object_or_404(User, id=self.request.user.id)
+        # user = self.request.user
+        return self.request.user.follower.all()
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
